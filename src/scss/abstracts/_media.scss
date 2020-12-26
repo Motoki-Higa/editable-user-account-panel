@@ -1,0 +1,40 @@
+// breakpoints
+$tablet-width: 1039px;
+$mobile-width: 767px;
+$mobile-sm-width: 320px;
+
+// mixin : media queries
+@mixin tablet {
+  @media (min-width: #{$mobile-width + 1}) and (max-width: #{$tablet-width}) {
+    @content;
+  }
+}
+@mixin mobile {
+  @media (max-width: #{$mobile-width}) {
+    @content;
+  }
+}
+@mixin mobile-sm {
+  @media (max-width: #{$mobile-sm-width}) {
+    @content;
+  }
+}
+
+/****************************
+  if use default, use below
+*****************************/
+// desktop
+@media screen and (min-width: 1040px) {
+} /* 1040px - */
+
+// tablet
+@media screen and (min-width: 768px) and (max-width: 1039px) {
+} /* 768px - 1039px */
+
+// mobile
+@media screen and (max-width: 767px) {
+} /* - 767px */
+
+
+
+

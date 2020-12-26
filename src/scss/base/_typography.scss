@@ -1,0 +1,157 @@
+/*****************************
+include fonts
+*****************************/
+// @font-face {
+// //   src:  url('./../fonts/FreedomMachine-Regular.eot') format('eot'),
+//         url('./../fonts/FreedomMachine-Regular.woff') format('woff'),
+//         url('./../fonts/FreedomMachine-Regular.ttf') format('truetype');
+// }
+
+// @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
+
+/*****************************
+h, p
+*****************************/
+// NOTE: bootstrap uses 16px = 1rem as default
+$base-size: 16;
+// Function to convert px value into rem
+// You can replace rem with any other value you want
+// i.e font-size: size(20) (this is equivalent with 20px)
+@function size($target, $context: $base-size) {
+  @return ($target / $context) * 1rem;
+}
+
+small {
+  font-size: 70%;
+}
+
+h2, .h2 {
+  font-size: size(60);
+  line-height: 1.5;
+
+  @include mobile {
+    font-size: size(40);
+  }
+}
+
+h3, .h3 {
+  font-size: size(48);
+  line-height: 1.6;
+
+  @include mobile {
+    font-size: size(18);
+  }
+}
+
+h4, .h4 {
+  font-size: size(24);
+  line-height: 1.6;
+
+  @include mobile {
+    font-size: size(14);
+  }
+}
+
+p {
+  font-size: size(16);
+  line-height: 1.6;
+
+  @include mobile {
+    font-size: size(12);
+  }
+}
+
+/*****************************
+.txt--
+*****************************/
+// text weight & style
+.txt--bold {
+  font-weight: bold !important;
+}
+.txt--normal {
+  font-weight: normal !important;
+}
+.txt--italic {
+  font-style: italic !important;
+}
+.txt--nodecor {
+  text-decoration: none !important;
+}
+.txt--up {
+  text-transform: uppercase !important;
+}
+.txt--sup {
+  font-size: 50%;
+  vertical-align: top;
+}
+.txt--hashBreak {
+  position: relative;
+  line-height: 1.6;
+  padding-left: 20px;
+
+  @include mobile {
+    font-size: 12rem;
+  }
+
+  &:before {
+    position: absolute;
+    content: '※';
+    margin-left: -20px;
+  }
+}
+
+// text green
+.txt--green {
+  color: $green;
+}
+
+// text align
+.txt--r {
+  text-align: right !important;
+}
+.txt--r {
+  text-align: right !important;
+}
+.txt--c {
+  text-align: center !important;
+}
+.txt--j {
+  text-align: justify !important;
+}
+
+// txt pointer
+.txt--link {
+  cursor: pointer;
+}
+
+// text underline
+@mixin txtUnderline {
+  text-decoration: underline;
+}
+.txt--underline {
+  text-decoration: underline !important;
+}
+
+// ellipsis
+@mixin ellipsis(){
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.txt--ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// text smoothing
+@mixin txtSmoothing(){
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.txt--smooth {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

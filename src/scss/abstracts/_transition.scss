@@ -1,0 +1,20 @@
+// var : cubic-bezier
+$easeInCubic     :  cubic-bezier(.63,.01,.23,.98);
+$easeOutCubic    :  cubic-bezier(0.215, 0.610, 0.355, 1.000);
+$easeInOutCubic  :  cubic-bezier(0.645, 0.045, 0.355, 1.000);
+
+// mixin : transition
+@mixin transition($propety: all, $time: .3s, $cubic: ease-in-out) {
+  -webkit-transition: $propety $time $cubic;
+  transition:         $propety $time $cubic;
+}
+
+// mixin : transition
+@mixin transitionEaseIn($propety: all, $time: .5s, $cubic: $easeInCubic) {
+  -webkit-transition: $propety $time $cubic;
+  transition:         $propety $time $cubic;
+}
+
+
+
+

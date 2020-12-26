@@ -1,0 +1,26 @@
+/*****************************
+components
+*****************************/
+.c-btn {
+  display: block;
+  width: 250px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  padding: 15px 0 15px;
+  border: 2px solid $green;
+  background-color: $green;
+  @include transition;
+
+  @include mobile {
+    font-size: 12px;
+    padding: 11px 10px;
+  }
+
+  &:hover {
+    color: $green;
+    text-decoration: none;
+    background-color: rgba(255,255,255,0.5);
+  }
+}

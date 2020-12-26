@@ -1,0 +1,10 @@
+// mixin : psudo (::before ::after)
+@mixin pseudo(){
+  position: absolute;
+  display: block;
+  content: '';
+}
+
+
+
+

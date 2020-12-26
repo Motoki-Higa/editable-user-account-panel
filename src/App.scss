@@ -1,3 +1,19 @@
+// abstracts
+@import 'scss/abstracts/variables';
+@import 'scss/abstracts/media';
+@import 'scss/abstracts/helper';
+@import 'scss/abstracts/mixins';
+@import 'scss/abstracts/transition';
+// base
+@import 'scss/base/reset';
+@import 'scss/base/typography';
+// components
+@import 'scss/components/buttons';
+// layout/modules
+@import 'scss/layout/grid';
+@import 'scss/layout/header';
+@import 'scss/layout/footer';
+
 .App {
   text-align: center;
 }
