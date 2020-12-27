@@ -22,7 +22,7 @@ Core
 
 Key libraries / Hooks / APIs
 
-- [zxcvbn](https://github.com/dropbox/zxcvbn) - Password strength
+- [zxcvbn](https://www.npmjs.com/package/zxcvbn) - Password strength
 - [Gravatar](https://en.gravatar.com/) - Centralised personal avatar
 - [react hook form](https://react-hook-form.com/form-builder) - Helps for validation
 
