@@ -4,9 +4,14 @@ import zxcvbn from 'zxcvbn';
 
 
 function App() {
-  const [ password, setPassword ] = useState(''); 
-  const { register, handleSubmit, errors } = useForm();
+  // state
+  const [ fname, setFname ] = useState('');
+  const [ lname, setLname ] = useState('');
+  const [ email, setEmail ] = useState('');
+  const [ password, setPassword ] = useState('');
 
+  // hook useForm & submit
+  const { register, handleSubmit, errors } = useForm();
   const onSubmit = (data) => {
     console.log(data);
   }
@@ -26,24 +31,34 @@ function App() {
     4: "Strong"
   };
 
-  const showPassword = document.getElementById('showPw');
-  const meter = document.getElementById('password-strength-meter');
-  const text = document.getElementById('password-strength-text');
+  let fieldVal = [fname, lname, email];
+
+
+  // handle other fields state change, also store vals in custom array for zxcvbbn to use
+  const handleFieldValueChange = (e) => {
+    // set state
+    setFname(e.target.value);
+    console.log(fieldVal);
+  }
 
 
   // handle password state change and zxcvbn validation
   const handlePasswordChange = (e) => {
-    // set state
-    setPassword(e.target.value);
+    const inputVal = e.target.value;
+    const meter = document.getElementById('password-strength-meter');
+    const text = document.getElementById('password-strength-text');
 
-    let val = password;
-    let result = zxcvbn(val);
+    // set state
+    setPassword(inputVal);
+
+    // check strength
+    let result = zxcvbn(inputVal);
 
     // Update the password strength meter
     meter.value = result.score;
 
     // Update the text indicator
-    if (val !== "") {
+    if (inputVal !== "") {
       text.innerHTML = "Strength: " + strength[result.score]; 
     } else {
       text.innerHTML = "";
@@ -53,7 +68,6 @@ function App() {
 
   // handle toggle mask/unmask pw
   const handleTogglePasswordMask = () => {
-    console.log('clicked')
     if (userInputsDom.password.getAttribute('type') === 'password'){
       userInputsDom.password.setAttribute('type', 'text');
     } else {
@@ -70,6 +84,8 @@ function App() {
         type="text" 
         id="fname" 
         name="fname" 
+        value={ fname }
+        onChange={ handleFieldValueChange } 
         ref={ register({ required: true }) } />
         { errors.fname && <p>必須項目です。</p> }
 

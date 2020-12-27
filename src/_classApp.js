@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import zxcvbn from 'zxcvbn';
-import useForm from "react-hook-form";
+// import useForm from "react-hook-form";
 
 
 const userInputsDom = {
@@ -20,6 +20,8 @@ class App extends Component {
   }
 
   handlePasswordChange = (e) => {
+    const inputVal = e.target.value;
+    console.log(inputVal)
     this.setState({ password: e.target.value });
 
     const strength = {
@@ -33,14 +35,13 @@ class App extends Component {
     const meter = document.getElementById('password-strength-meter');
     const text = document.getElementById('password-strength-text');
 
-    let val = this.state.password;
-    let result = zxcvbn(val);
+    let result = zxcvbn(inputVal);
 
     // Update the password strength meter
     meter.value = result.score;
 
     // Update the text indicator
-    if (val !== "") {
+    if (inputVal !== "") {
       text.innerHTML = "Strength: " + strength[result.score]; 
     } else {
       text.innerHTML = "";
