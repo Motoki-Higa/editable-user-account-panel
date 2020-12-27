@@ -3,19 +3,20 @@ import { useForm } from "react-hook-form";
 import zxcvbn from 'zxcvbn';
 
 
-const userInputsDom = {
-  fname: document.getElementById('fname'),
-  lname: document.getElementById('lname'),
-  email: document.getElementById('email'),
-  password: document.getElementById('password'),
-};
-
 function App() {
   const [ password, setPassword ] = useState(''); 
   const { register, handleSubmit, errors } = useForm();
+
   const onSubmit = (data) => {
     console.log(data);
   }
+
+  const userInputsDom = {
+    fname: document.getElementById('fname'),
+    lname: document.getElementById('lname'),
+    email: document.getElementById('email'),
+    password: document.getElementById('password'),
+  };
 
   const strength = {
     0: "Worst",
@@ -25,14 +26,15 @@ function App() {
     4: "Strong"
   };
 
-  
+  const showPassword = document.getElementById('showPw');
+  const meter = document.getElementById('password-strength-meter');
+  const text = document.getElementById('password-strength-text');
 
+
+  // handle password state change and zxcvbn validation
   const handlePasswordChange = (e) => {
     // set state
     setPassword(e.target.value);
-
-    const meter = document.getElementById('password-strength-meter');
-    const text = document.getElementById('password-strength-text');
 
     let val = password;
     let result = zxcvbn(val);
@@ -47,7 +49,19 @@ function App() {
       text.innerHTML = "";
     }
   };
+
+
+  // handle toggle mask/unmask pw
+  const handleTogglePasswordMask = () => {
+    console.log('clicked')
+    if (userInputsDom.password.getAttribute('type') === 'password'){
+      userInputsDom.password.setAttribute('type', 'text');
+    } else {
+      userInputsDom.password.setAttribute('type', 'password');
+    }
+  };
   
+
   return (
     <form action="" onSubmit={ handleSubmit(onSubmit) }>
       {/* first name */}
@@ -99,9 +113,11 @@ function App() {
       <meter 
         max="4" 
         id="password-strength-meter"></meter>
-
       <p id="password-strength-text"></p>
-      <p id="showPw">Show password</p>
+
+      <p 
+        id="showPw"
+        onClick={ handleTogglePasswordMask } >Show password</p>
 
       {/* submit */}
       <input type="submit" />
