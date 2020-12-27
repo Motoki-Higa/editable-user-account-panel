@@ -31,38 +31,50 @@ function App() {
     4: "Strong"
   };
 
-  let fieldVal = [fname, lname, email];
+  let userInputs = {
+    fname,
+    lname,
+    email,
+  };
 
 
-  // handle other fields state change, also store vals in custom array for zxcvbbn to use
-  const handleFieldValueChange = (e) => {
-    // set state
-    setFname(e.target.value);
-    console.log(fieldVal);
-  }
-
-
-  // handle password state change and zxcvbn validation
-  const handlePasswordChange = (e) => {
-    const inputVal = e.target.value;
+  // handle pw strength check
+  function handleStrengthChech(passwordVal) {
     const meter = document.getElementById('password-strength-meter');
     const text = document.getElementById('password-strength-text');
-
-    // set state
-    setPassword(inputVal);
-
-    // check strength
-    let result = zxcvbn(inputVal);
+  
+    // check strength *second arg only takes array
+    let result = zxcvbn(passwordVal, [userInputs.fname, userInputs.lname, userInputs.email]);
 
     // Update the password strength meter
     meter.value = result.score;
 
     // Update the text indicator
-    if (inputVal !== "") {
+    if (passwordVal !== "") {
       text.innerHTML = "Strength: " + strength[result.score]; 
     } else {
       text.innerHTML = "";
     }
+  }
+
+
+  // handle other fields state change, also store vals in custom obj for zxcvbn to use
+  const handleFieldValueChange = (setState, key, e) => {
+    const inputVal = e.target.value;
+
+    setState(inputVal);
+    userInputs[key] = inputVal;
+
+    handleStrengthChech(password);
+  }
+
+
+  // handle password state change and trigger handleStrengthChech()
+  const handlePasswordChange = (e) => {
+    const passwordVal = e.target.value;
+    
+    setPassword(passwordVal);
+    handleStrengthChech(passwordVal);
   };
 
 
@@ -85,7 +97,7 @@ function App() {
         id="fname" 
         name="fname" 
         value={ fname }
-        onChange={ handleFieldValueChange } 
+        onChange={ (e) => { handleFieldValueChange(setFname, 'fname', e) } } 
         ref={ register({ required: true }) } />
         { errors.fname && <p>必須項目です。</p> }
 
@@ -96,6 +108,8 @@ function App() {
         type="text" 
         id="lname" 
         name="lname" 
+        value={ lname }
+        onChange={ (e) => { handleFieldValueChange(setLname, 'lname', e) } } 
         ref={ register({ required: true }) } />
       { errors.fname && <p>必須項目です。</p> }
 
@@ -106,6 +120,8 @@ function App() {
         type="text" 
         id="email" 
         name="email" 
+        value={ email }
+        onChange={ (e) => { handleFieldValueChange(setEmail, 'email', e) } } 
         ref={ register({ 
           required: true,
           pattern: {　value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,}
