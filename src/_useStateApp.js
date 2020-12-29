@@ -1,29 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import zxcvbn from 'zxcvbn';
 
 
 function App() {
-  // parse data from database (localstorage is used for development)
-  const storedData = JSON.parse(localStorage.getItem('data'));
-  
-  // hook useForm. get data from database (if any) and update input values
-  const { register, handleSubmit, setValue, errors } = useForm({
-    defaultValues: {
-      fname: storedData ? storedData['fname'] : '',
-      lname: storedData ? storedData['lname'] : '',
-      email: storedData ? storedData['email'] : '',
-      password: storedData ? storedData['password'] : '',
-    }
-  });
+  // state
+  const [ fname, setFname ] = useState('');
+  const [ lname, setLname ] = useState('');
+  const [ email, setEmail ] = useState('');
+  const [ password, setPassword ] = useState('');
 
-  // get and update userInputs array for validation use. if no database, then '';
-  let userInputs = {
-    fname: storedData ? storedData['fname'] : '',
-    lname: storedData ? storedData['lname'] : '',
-    email: storedData ? storedData['email'] : '',
-    password: storedData ? storedData['password'] : '',
-  };
+  // hook useForm & submit
+  const { register, handleSubmit, errors } = useForm();
 
   const strength = {
     0: "Worst",
@@ -33,9 +21,15 @@ function App() {
     4: "Strong"
   };
 
+  let userInputs = {
+    fname,
+    lname,
+    email,
+  };
+
 
   // handle pw strength check
-  function handleStrengthCheck(passwordVal) {
+  function handleStrengthChech(passwordVal) {
     const meter = document.getElementById('password-strength-meter');
     const text = document.getElementById('password-strength-text');
   
@@ -46,23 +40,32 @@ function App() {
     meter.value = result.score;
 
     // Update the text indicator
-    if (passwordVal !== '') {
-      text.innerHTML = 'Strength: ' + strength[result.score]; 
+    if (passwordVal !== "") {
+      text.innerHTML = "Strength: " + strength[result.score]; 
     } else {
-      text.innerHTML = '';
+      text.innerHTML = "";
     }
   }
 
 
   // handle other fields state change, also store vals in custom obj for zxcvbn to use
-  const handleFieldValueChange = (key, e) => {
+  const handleFieldValueChange = (setState, key, e) => {
     const inputVal = e.target.value;
 
-    setValue(key, inputVal);
+    setState(inputVal);
     userInputs[key] = inputVal;
 
-    handleStrengthCheck(userInputs.password);
+    handleStrengthChech(password);
   }
+
+
+  // handle password state change and trigger handleStrengthChech()
+  const handlePasswordChange = (e) => {
+    const passwordVal = e.target.value;
+    
+    setPassword(passwordVal);
+    handleStrengthChech(passwordVal);
+  };
 
 
   // handle toggle mask/unmask pw
@@ -83,6 +86,19 @@ function App() {
   };
 
 
+  // handle get and display data into input fields
+  const handleSetStateFromDatabase = () => {
+    
+    let storedData = JSON.parse(localStorage.getItem('data'));
+
+    setFname(storedData['fname']);
+    setLname(storedData['lname']);
+    setEmail(storedData['email']);
+    setPassword(storedData['password']);
+  };
+  window.addEventListener('load', handleSetStateFromDatabase);
+  
+
   return (
     <form action="" onSubmit={ handleSubmit(handleOnSubmit) }>
       {/* first name */}
@@ -91,7 +107,8 @@ function App() {
         type="text" 
         id="fname" 
         name="fname" 
-        onChange={ (e) => { handleFieldValueChange('fname', e) } } 
+        value={ fname }
+        onChange={ (e) => { handleFieldValueChange(setFname, 'fname', e) } } 
         ref={ register({ 
           required: true,
           pattern: { value: /^\S*$/ }
@@ -105,7 +122,8 @@ function App() {
         type="text" 
         id="lname" 
         name="lname" 
-        onChange={ (e) => { handleFieldValueChange('lname', e) } } 
+        value={ lname }
+        onChange={ (e) => { handleFieldValueChange(setLname, 'lname', e) } } 
         ref={ register({ 
           required: true,
           pattern: { value: /^\S*$/ }
@@ -119,7 +137,8 @@ function App() {
         type="text" 
         id="email" 
         name="email" 
-        onChange={ (e) => { handleFieldValueChange('email', e) } } 
+        value={ email }
+        onChange={ (e) => { handleFieldValueChange(setEmail, 'email', e) } } 
         ref={ register({ 
           required: true,
           pattern: {　value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,}
@@ -135,7 +154,8 @@ function App() {
         type="password" 
         id="password"
         name="password"
-        onChange={ (e) => { handleFieldValueChange('password', e) } } 
+        value={ password }
+        onChange={ handlePasswordChange } 
         ref={ register({ 
           required: true,
           pattern: { value: /^\S*$/ }
