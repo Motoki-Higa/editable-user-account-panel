@@ -126,7 +126,7 @@ function App() {
         value={ lname }
         onChange={ (e) => { handleFieldValueChange(setLname, 'lname', e) } } 
         ref={ register({ required: true }) } />
-      { errors.fname && <p>必須項目です。</p> }
+      { errors.lname && <p>必須項目です。</p> }
 
 
       {/* email */}
