@@ -12,16 +12,6 @@ function App() {
 
   // hook useForm & submit
   const { register, handleSubmit, errors } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
-  }
-
-  const userInputsDom = {
-    fname: document.getElementById('fname'),
-    lname: document.getElementById('lname'),
-    email: document.getElementById('email'),
-    password: document.getElementById('password'),
-  };
 
   const strength = {
     0: "Worst",
@@ -80,12 +70,37 @@ function App() {
 
   // handle toggle mask/unmask pw
   const handleTogglePasswordMask = () => {
+    const userInputsDom = {
+      fname: document.getElementById('fname'),
+      lname: document.getElementById('lname'),
+      email: document.getElementById('email'),
+      password: document.getElementById('password'),
+    };
+
     if (userInputsDom.password.getAttribute('type') === 'password'){
       userInputsDom.password.setAttribute('type', 'text');
     } else {
       userInputsDom.password.setAttribute('type', 'password');
     }
   };
+
+
+  // handle save input values to db (in this case, to local storage)
+  const onSubmit = (data) => {
+    localStorage.setItem('data', JSON.stringify(data));
+  }
+
+
+  // handle get and display data into input fields
+  const handleSetStateFromDatabase = () => {
+    let storedData = JSON.parse(localStorage.getItem('data'));
+
+    setFname(storedData['fname']);
+    setLname(storedData['lname']);
+    setEmail(storedData['email']);
+    setPassword(storedData['password']);
+  }
+  window.addEventListener('load', handleSetStateFromDatabase);
   
 
   return (
