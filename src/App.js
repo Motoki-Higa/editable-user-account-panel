@@ -70,41 +70,37 @@ function App() {
 
   // handle toggle mask/unmask pw
   const handleTogglePasswordMask = () => {
-    const userInputsDom = {
-      fname: document.getElementById('fname'),
-      lname: document.getElementById('lname'),
-      email: document.getElementById('email'),
-      password: document.getElementById('password'),
-    };
+    const passwordDOM = document.getElementById('password');
 
-    if (userInputsDom.password.getAttribute('type') === 'password'){
-      userInputsDom.password.setAttribute('type', 'text');
+    if (passwordDOM.getAttribute('type') === 'password'){
+      passwordDOM.setAttribute('type', 'text');
     } else {
-      userInputsDom.password.setAttribute('type', 'password');
+      passwordDOM.setAttribute('type', 'password');
     }
   };
 
 
   // handle save input values to db (in this case, to local storage)
-  const onSubmit = (data) => {
+  const handleOnSubmit = (data) => {
     localStorage.setItem('data', JSON.stringify(data));
-  }
+  };
 
 
   // handle get and display data into input fields
   const handleSetStateFromDatabase = () => {
+    
     let storedData = JSON.parse(localStorage.getItem('data'));
 
     setFname(storedData['fname']);
     setLname(storedData['lname']);
     setEmail(storedData['email']);
     setPassword(storedData['password']);
-  }
+  };
   window.addEventListener('load', handleSetStateFromDatabase);
   
 
   return (
-    <form action="" onSubmit={ handleSubmit(onSubmit) }>
+    <form action="" onSubmit={ handleSubmit(handleOnSubmit) }>
       {/* first name */}
       <label htmlFor="fname">First name:</label>
       <input 
@@ -113,7 +109,10 @@ function App() {
         name="fname" 
         value={ fname }
         onChange={ (e) => { handleFieldValueChange(setFname, 'fname', e) } } 
-        ref={ register({ required: true }) } />
+        ref={ register({ 
+          required: true,
+          pattern: { value: /^\S*$/ }
+        }) } />
         { errors.fname && <p>必須項目です。</p> }
 
 
@@ -125,7 +124,10 @@ function App() {
         name="lname" 
         value={ lname }
         onChange={ (e) => { handleFieldValueChange(setLname, 'lname', e) } } 
-        ref={ register({ required: true }) } />
+        ref={ register({ 
+          required: true,
+          pattern: { value: /^\S*$/ }
+        }) } />
       { errors.lname && <p>必須項目です。</p> }
 
 
@@ -154,7 +156,10 @@ function App() {
         name="password"
         value={ password }
         onChange={ handlePasswordChange } 
-        ref={ register({ required: true }) } />
+        ref={ register({ 
+          required: true,
+          pattern: { value: /^\S*$/ }
+        }) } />
         { errors.password && <p>必須項目です。</p> }
 
       <meter 
