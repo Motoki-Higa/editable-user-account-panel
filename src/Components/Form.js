@@ -83,12 +83,6 @@ function Form() {
   };
 
 
-  // password visibility display condition
-  const pwVisibleButton = () => {
-    return isPasswordVisible ? <VisibilityOnIcon /> : <VisibilityOffIcon />;
-  }
-
-
   // handle update Gravatar
   const handleUpdateGravatar = () => {
     const gravatar = 'https://www.gravatar.com/avatar/';
@@ -104,17 +98,40 @@ function Form() {
   useEffect(() => { handleUpdateGravatar() }); // update gravatar after load the page
 
 
+  // password visibility display condition
+  const pwVisibleButton = () => {
+    return isPasswordVisible ? <VisibilityOnIcon /> : <VisibilityOffIcon />;
+  }
+
+
+  // 
+
+
   return (
     <div className="formWrapper">
       {/* Gravatar */}
-      <div className="sct-gravatar">
-        <div className="sct-gravatar__imgWrap">
-          <picture>
-            <img 
-            id="profileImg" 
-            src="https://www.gravatar.com/avatar/"
-            srcSet="https://www.gravatar.com/avatar/?s=20 320w, https://www.gravatar.com/avatar/?s=400 800w" />
-          </picture>
+      <div className="sct-profile">
+        <div className="sct-profile__inner">
+          <div className="sct-profile__gravatar">
+            <picture>
+              <img 
+              id="profileImg" 
+              src="https://www.gravatar.com/avatar/"
+              srcSet="https://www.gravatar.com/avatar/?s=20 320w, https://www.gravatar.com/avatar/?s=400 800w" />
+            </picture>
+          </div>
+          <div className="sct-profile__txtBox">
+            <p className="sct-profile__name">{
+              (()=> {
+                if (storedData) {
+                  return <span>{ storedData['fname'] + ' ' + storedData['lname'] } </span>;
+                } else {
+                  return <span></span>;
+                }
+              })()
+            }
+            </p>
+          </div>
         </div>
       </div>
 
@@ -132,7 +149,7 @@ function Form() {
                 required: true,
                 pattern: { value: /^\S*$/ }
               }) } />
-              { errors.fname && <p>必須項目です。</p> }
+              { errors.fname && <p className="sct-form__error">Required</p> }
           </div>
 
           {/* last name */}
@@ -147,7 +164,7 @@ function Form() {
                 required: true,
                 pattern: { value: /^\S*$/ }
               }) } />
-            { errors.lname && <p>必須項目です。</p> }
+            { errors.lname && <p className="sct-form__error">Required</p> }
           </div>
 
           {/* email */}
@@ -166,39 +183,48 @@ function Form() {
                 pattern: {　value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,}
               }) 
             } />
-            { errors.email && errors.email.type === "required" && <p>必須項目です。</p> }
-            { errors.email && errors.email.type === "pattern" && <p>メールアドレスの形式が正しくありません。</p> }
+            { errors.email && errors.email.type === "required" && <p className="sct-form__error">Required</p> }
+            { errors.email && errors.email.type === "pattern" && <p className="sct-form__error">Invalid mail address</p> }
           </div>
 
           {/* password */}
           <div className="sct-form__field sct-form__field--password">
             <label htmlFor="password">Password</label>
             <div className="sct-form__fieldCol">
-              <div className="sct-form__inputWrapper sct-form__col50">
-                <input 
-                  type="password" 
-                  id="password"
-                  name="password"
-                  onChange={ (e) => { handleFieldValueChange('password', e) } } 
-                  ref={ register({ 
-                    required: true,
-                    pattern: { value: /^\S*$/ }
-                  }) } />
-                { errors.password && errors.password.type === "required" && <p>必須項目です。</p> }
-                { errors.password && errors.password.type === "pattern" && <p>スペースは使用できません。</p> }
+              <div className="sct-form__col50">
+                <div className="sct-form__inputWrapper">
+                  <input 
+                    type="password" 
+                    id="password"
+                    name="password"
+                    onChange={ (e) => { handleFieldValueChange('password', e) } } 
+                    ref={ register({ 
+                      required: true,
+                      minLength: 4,
+                      pattern: { value: /^\S*$/ },
+                    }) } />
+                  <span 
+                    id="showPw"
+                    className="sct-form__btnPwVisible"
+                    onClick={ handleTogglePasswordMask } >{
+                      (()=> {
+                        return isPasswordVisible ? <VisibilityOnIcon /> : <VisibilityOffIcon />;
+                      })()
+                    }</span>
+                </div>
 
-                <span 
-                  id="showPw"
-                  className="sct-form__btnPwVisible"
-                  onClick={ handleTogglePasswordMask } >{ pwVisibleButton() }</span>
-              </div>
-              
-              <div className="sct-form__strength my-box sct-form__col50">
                 <div className="sct-form__meter">
                   <span 
                     id="custom-meter"
                     className="sct-form__meterBar" ></span>
                 </div>
+
+                { errors.password && errors.password.type === "required" && <p className="sct-form__error">Required</p> }
+                { errors.password && errors.password.type === "minLength" && <p className="sct-form__error">Minimum 4 letters</p> }
+                { errors.password && errors.password.type === "pattern" && <p className="sct-form__error">Space is not available</p> }
+              </div>
+              
+              <div className="sct-form__strength my-box sct-form__col50">
                 <p id="password-strength-text" className="sct-form__strengthTxt"></p>
               </div>
             </div>
@@ -207,7 +233,7 @@ function Form() {
 
           {/* submit */}
           <div className="sct-form__field sct-form__field--btn">
-            <input type="submit" />
+            <input type="submit" value="UPDATE CHANGES" />
           </div>
         </form>
       </div>
