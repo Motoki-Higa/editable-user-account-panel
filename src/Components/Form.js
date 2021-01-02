@@ -7,7 +7,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 function Form() {
   // state: pw visibility
-  const [visibility, setVisibility] = useState(true);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   // parse data from database (localstorage is used for development)
   const storedData = JSON.parse(localStorage.getItem('data'));
@@ -31,12 +31,6 @@ function Form() {
   };
 
   const strength = { 0: "Worst", 1: "Bad", 2: "Weak", 3: "Good", 4: "Strong" };
-
-
-  // handle password visibility
-  const handlePwVisibility = () => {
-    setVisibility(!visibility);
-  }
 
 
   // handle password strength check
@@ -70,6 +64,9 @@ function Form() {
 
   // handle toggle mask/unmask pw
   const handleTogglePasswordMask = () => {
+    // set visibility state
+    setIsPasswordVisible(!isPasswordVisible);
+
     const passwordDOM = document.getElementById('password');
 
     if (passwordDOM.getAttribute('type') === 'password'){
@@ -77,8 +74,6 @@ function Form() {
     } else {
       passwordDOM.setAttribute('type', 'password');
     }
-
-    handlePwVisibility();
   };
 
 
@@ -86,6 +81,12 @@ function Form() {
   const handleOnSubmit = (data) => {
     localStorage.setItem('data', JSON.stringify(data));
   };
+
+
+  // password visibility display condition
+  const pwVisibleButton = () => {
+    return isPasswordVisible ? <VisibilityOnIcon /> : <VisibilityOffIcon />;
+  }
 
 
   // handle update Gravatar
@@ -109,7 +110,9 @@ function Form() {
       <div className="sct-gravatar">
         <div className="sct-gravatar__imgWrap">
           <picture>
-            <img id="profileImg" src="https://www.gravatar.com/avatar/"
+            <img 
+            id="profileImg" 
+            src="https://www.gravatar.com/avatar/"
             srcSet="https://www.gravatar.com/avatar/?s=20 320w, https://www.gravatar.com/avatar/?s=400 800w" />
           </picture>
         </div>
@@ -190,13 +193,10 @@ function Form() {
               <p id="password-strength-text" className="form__strength"></p>
             </div>
             
-            
             <p 
               id="showPw"
               className="form__btn"
-              onClick={ handleTogglePasswordMask } >
-                {visibility && (<VisibilityOffIcon />)}
-                {!visibility && (<VisibilityOnIcon />)}</p>
+              onClick={ handleTogglePasswordMask } >{ pwVisibleButton() }</p>
           </div>
 
           {/* submit */}
