@@ -63,10 +63,11 @@ function Form() {
 
   // handle other fields state change, also store vals in custom obj for zxcvbn to use
   const handleFieldValueChange = (key, e) => {
-    const inputVal = e.target.value;
+    userInputs[key] = e.target.value;
 
-    userInputs[key] = inputVal;
-    handleStrengthCheck(userInputs.password);
+    if (key === 'password'){
+      handleStrengthCheck(userInputs.password);
+    }
   };
 
 
@@ -236,8 +237,8 @@ function Form() {
                 { errors.password && errors.password.type === "pattern" && <p className="sct-form__error">Your password must contain at least one number and have a mixture of uppercase and lowercase letters.</p> }
               </div>
               
-              <div className="sct-form__strength my-box sct-form__col50">
-                <p className="sct-form__strengthTxt">・At least 6 characters long<br />・At least one number<br />・At least one uppercase<br />・At least one lowercase letters</p>
+              <div className="sct-form__strength sct-form__col50">
+                <p className="sct-form__strengthTxt">・At least 6 characters<br />・At least one number<br />・At least one uppercase<br />・At least one lowercase</p>
               </div>
             </div>
             
