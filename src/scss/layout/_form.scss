@@ -42,6 +42,10 @@
   padding: 36px;
   background-color: $light-grey;
 
+  &__form {
+    width: 100%;
+  }
+
   &__field {
     display: flex;
     flex-wrap: wrap;
@@ -52,6 +56,7 @@
     }
 
     label {
+      display: block;
       font-size: size(14);
       font-weight: 600;
       color: $mid-grey;
@@ -68,7 +73,75 @@
     }
   }
 
-  &__strength {
+  &__fieldCol {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
     width: 100%;
   }
+
+  &__col50 {
+    width: 48%;
+  }
+
+  &__inputWrapper {
+    position: relative;
+  }
+
+  &__btnPwVisible {
+    position: absolute;
+    display: inline-block;
+    top: 50%;
+    right: 0;
+    margin-right: 10px;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  &__strengthTxt {
+    font-size: size(14);
+  }
 }
+
+/*****************************
+sct-form__meter
+*****************************/
+.sct-form__meter {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  background-color: $mid-grey;
+  
+}
+
+#custom-meter {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  height: 100%;
+  background-color: $red;
+  vertical-align: top;
+  transition: all 0.3s linear;
+
+  &.strength-0 {
+    width: 0%;
+  }
+  &.strength-1 {
+    width: 25%;
+    background-color: $red;
+  }
+  &.strength-2 {
+    width: 50%;
+    background-color: $orange;
+  }
+  &.strength-3 {
+    width: 75%;
+    background-color: $yellow-green;
+  }
+  &.strength-4 {
+    width: 100%;
+    background-color: $green;
+  }
+}
+

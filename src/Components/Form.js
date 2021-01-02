@@ -35,14 +35,14 @@ function Form() {
 
   // handle password strength check
   const handleStrengthCheck = (passwordVal) => {
-    const meter = document.getElementById('password-strength-meter');
+    const customMeter = document.getElementById('custom-meter');
     const text = document.getElementById('password-strength-text');
   
     // check strength *second arg only takes array
     let result = zxcvbn(passwordVal, [userInputs.fname, userInputs.lname, userInputs.email]);
 
     // Update the password strength meter
-    meter.value = result.score;
+    customMeter.setAttribute('class', 'strength-' + result.score)
 
     // Update the text indicator
     if (passwordVal !== '') {
@@ -173,30 +173,36 @@ function Form() {
           {/* password */}
           <div className="sct-form__field sct-form__field--password">
             <label htmlFor="password">Password</label>
-            <input 
-              type="password" 
-              id="password"
-              name="password"
-              onChange={ (e) => { handleFieldValueChange('password', e) } } 
-              ref={ register({ 
-                required: true,
-                pattern: { value: /^\S*$/ }
-              }) } />
-            { errors.password && errors.password.type === "required" && <p>必須項目です。</p> }
-            { errors.password && errors.password.type === "pattern" && <p>スペースは使用できません。</p> }
+            <div className="sct-form__fieldCol">
+              <div className="sct-form__inputWrapper sct-form__col50">
+                <input 
+                  type="password" 
+                  id="password"
+                  name="password"
+                  onChange={ (e) => { handleFieldValueChange('password', e) } } 
+                  ref={ register({ 
+                    required: true,
+                    pattern: { value: /^\S*$/ }
+                  }) } />
+                { errors.password && errors.password.type === "required" && <p>必須項目です。</p> }
+                { errors.password && errors.password.type === "pattern" && <p>スペースは使用できません。</p> }
 
-            <div className="sct-form__strength">
-              <meter
-                className="form__pwMeter"
-                max="4" 
-                id="password-strength-meter"></meter>
-              <p id="password-strength-text" className="form__strength"></p>
+                <span 
+                  id="showPw"
+                  className="sct-form__btnPwVisible"
+                  onClick={ handleTogglePasswordMask } >{ pwVisibleButton() }</span>
+              </div>
+              
+              <div className="sct-form__strength my-box sct-form__col50">
+                <div className="sct-form__meter">
+                  <span 
+                    id="custom-meter"
+                    className="sct-form__meterBar" ></span>
+                </div>
+                <p id="password-strength-text" className="sct-form__strengthTxt"></p>
+              </div>
             </div>
             
-            <p 
-              id="showPw"
-              className="form__btn"
-              onClick={ handleTogglePasswordMask } >{ pwVisibleButton() }</p>
           </div>
 
           {/* submit */}
