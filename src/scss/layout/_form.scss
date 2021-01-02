@@ -133,7 +133,8 @@
   }
 
   &__strengthTxt {
-    font-size: size(14);
+    font-size: size(12);
+    color: $black;
   }
 
   &__error {
@@ -185,5 +186,55 @@ sct-form__meter
     width: 100%;
     background-color: $green;
   }
+}
+
+
+.message {
+  position: relative;
+  display: block;
+  font-size: 14px;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 2px solid $green;
+  -webkit-animation: slideUp .5 ease 0s;
+  -moz-animation: slideUp .5s ease 0s;
+  animation: slideUp .5s ease 0s;
+}
+
+.messageBox__closeBtn {
+  position: absolute;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  right: 0;
+  margin-right: 12px;
+  border-radius: 100%;
+  border: 1px solid #777;
+
+  .MuiSvgIcon-root {
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+  }
+}
+
+@keyframes slideUp {
+  0% { transform: translateX(10px); opacity: 0; }
+  100% { transform: translateX(0px); opacity: 1; }
+}
+@-moz-keyframes slideUp {
+  0% { transform: translateX(10px); opacity: 0; }
+  100% { transform: translateX(0px); opacity: 1; }
+}
+@-webkit-keyframes slideUp {
+  0% { transform: translateX(10px); opacity: 0; }
+  100% { transform: translateX(0px); opacity: 1; }
 }
 

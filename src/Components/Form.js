@@ -2,18 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import zxcvbn from 'zxcvbn';
 import MD5 from 'crypto-js/md5';
+import CloseBtn from '@material-ui/icons/Close';
 import VisibilityOnIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 function Form() {
-  // state: pw visibility
+  // state
+  const [message, setMessage] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   // parse data from database (localstorage is used for development)
   const storedData = JSON.parse(localStorage.getItem('data'));
   
   // hook useForm. get data from database (if any) and update default input values
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit, errors, reset } = useForm({
     defaultValues: {
       fname: storedData ? storedData['fname'] : '',
       lname: storedData ? storedData['lname'] : '',
@@ -33,6 +35,12 @@ function Form() {
   const strength = { 0: "Worst", 1: "Bad", 2: "Weak", 3: "Good", 4: "Strong" };
 
 
+  // handle close message
+  const handleCloseMsg = () => {
+    setMessage('');
+  };
+
+
   // handle password strength check
   const handleStrengthCheck = (passwordVal) => {
     const customMeter = document.getElementById('custom-meter');
@@ -50,7 +58,7 @@ function Form() {
     } else {
       text.innerHTML = '';
     }
-  }
+  };
 
 
   // handle other fields state change, also store vals in custom obj for zxcvbn to use
@@ -59,7 +67,7 @@ function Form() {
 
     userInputs[key] = inputVal;
     handleStrengthCheck(userInputs.password);
-  }
+  };
 
 
   // handle toggle mask/unmask pw
@@ -80,6 +88,8 @@ function Form() {
   // handle save input values to db (in this case, to local storage)
   const handleOnSubmit = (data) => {
     localStorage.setItem('data', JSON.stringify(data));
+
+    setMessage('Your details are updated!');
   };
 
 
@@ -96,15 +106,6 @@ function Form() {
     profileImg.setAttribute('srcset', imgURL + ' 320w,' + imgURL + '?s=400 800w,');
   };
   useEffect(() => { handleUpdateGravatar() }); // update gravatar after load the page
-
-
-  // password visibility display condition
-  const pwVisibleButton = () => {
-    return isPasswordVisible ? <VisibilityOnIcon /> : <VisibilityOffIcon />;
-  }
-
-
-  // 
 
 
   return (
@@ -136,6 +137,16 @@ function Form() {
       </div>
 
       <div className="sct-form">
+        {(()=> {
+          if (message) {
+            return <span id="message" className="message">{ message }
+              <span 
+                onClick={ () => { handleCloseMsg()} }
+                className="messageBox__closeBtn"><CloseBtn /></span>
+            </span>;
+          }
+        })()}
+
         <form className="sct-form__form" action="" onSubmit={ handleSubmit(handleOnSubmit) }>
           {/* first name */}
           <div className="sct-form__field sct-form__field--fname">
@@ -200,8 +211,8 @@ function Form() {
                     onChange={ (e) => { handleFieldValueChange('password', e) } } 
                     ref={ register({ 
                       required: true,
-                      minLength: 4,
-                      pattern: { value: /^\S*$/ },
+                      minLength: 6,
+                      pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/ },
                     }) } />
                   <span 
                     id="showPw"
@@ -218,14 +229,15 @@ function Form() {
                     id="custom-meter"
                     className="sct-form__meterBar" ></span>
                 </div>
+                <p id="password-strength-text" className="sct-form__strengthTxt"></p>
 
                 { errors.password && errors.password.type === "required" && <p className="sct-form__error">Required</p> }
-                { errors.password && errors.password.type === "minLength" && <p className="sct-form__error">Minimum 4 letters</p> }
-                { errors.password && errors.password.type === "pattern" && <p className="sct-form__error">Space is not available</p> }
+                { errors.password && errors.password.type === "minLength" && <p className="sct-form__error">Minimum 6 characters</p> }
+                { errors.password && errors.password.type === "pattern" && <p className="sct-form__error">Your password must contain at least one number and have a mixture of uppercase and lowercase letters.</p> }
               </div>
               
               <div className="sct-form__strength my-box sct-form__col50">
-                <p id="password-strength-text" className="sct-form__strengthTxt"></p>
+                <p className="sct-form__strengthTxt">・At least 6 characters long<br />・At least one number<br />・At least one uppercase<br />・At least one lowercase letters</p>
               </div>
             </div>
             
