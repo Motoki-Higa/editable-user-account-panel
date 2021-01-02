@@ -9,8 +9,8 @@ components
   text-align: center;
   text-decoration: none;
   padding: 15px 0 15px;
-  border: 2px solid $green;
-  background-color: $green;
+  border: 2px solid $mid-grey;
+  background-color: $mid-grey;
   @include transition;
 
   @include mobile {
@@ -19,7 +19,7 @@ components
   }
 
   &:hover {
-    color: $green;
+    color: $mid-grey;
     text-decoration: none;
     background-color: rgba(255,255,255,0.5);
   }

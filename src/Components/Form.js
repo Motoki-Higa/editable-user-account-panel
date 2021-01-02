@@ -1,14 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import zxcvbn from 'zxcvbn';
 import MD5 from 'crypto-js/md5';
+import VisibilityOnIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 function Form() {
+  // state: pw visibility
+  const [visibility, setVisibility] = useState(true);
+
   // parse data from database (localstorage is used for development)
   const storedData = JSON.parse(localStorage.getItem('data'));
   
-  // hook useForm. get data from database (if any) and update input values
-  const { register, handleSubmit, setValue, errors } = useForm({
+  // hook useForm. get data from database (if any) and update default input values
+  const { register, handleSubmit, errors } = useForm({
     defaultValues: {
       fname: storedData ? storedData['fname'] : '',
       lname: storedData ? storedData['lname'] : '',
@@ -17,7 +22,7 @@ function Form() {
     }
   });
 
-  // get and update userInputs array for validation use. if no database, then '';
+  // set userInputs array for validation use. if no database, then '';
   let userInputs = {
     fname: storedData ? storedData['fname'] : '',
     lname: storedData ? storedData['lname'] : '',
@@ -28,8 +33,14 @@ function Form() {
   const strength = { 0: "Worst", 1: "Bad", 2: "Weak", 3: "Good", 4: "Strong" };
 
 
-  // handle pw strength check
-  function handleStrengthCheck(passwordVal) {
+  // handle password visibility
+  const handlePwVisibility = () => {
+    setVisibility(!visibility);
+  }
+
+
+  // handle password strength check
+  const handleStrengthCheck = (passwordVal) => {
     const meter = document.getElementById('password-strength-meter');
     const text = document.getElementById('password-strength-text');
   
@@ -52,9 +63,7 @@ function Form() {
   const handleFieldValueChange = (key, e) => {
     const inputVal = e.target.value;
 
-    setValue(key, inputVal);
     userInputs[key] = inputVal;
-
     handleStrengthCheck(userInputs.password);
   }
 
@@ -68,6 +77,8 @@ function Form() {
     } else {
       passwordDOM.setAttribute('type', 'password');
     }
+
+    handlePwVisibility();
   };
 
 
@@ -93,96 +104,107 @@ function Form() {
 
 
   return (
-    <div>
-      <div className="imgWrap">
-        <picture>
-          <img id="profileImg" src="https://www.gravatar.com/avatar/"
-          srcSet="https://www.gravatar.com/avatar/?s=20 320w, https://www.gravatar.com/avatar/?s=400 800w"
-          alt="Image description" />
-        </picture>
+    <div className="formWrapper">
+      {/* Gravatar */}
+      <div className="sct-gravatar">
+        <div className="sct-gravatar__imgWrap">
+          <picture>
+            <img id="profileImg" src="https://www.gravatar.com/avatar/"
+            srcSet="https://www.gravatar.com/avatar/?s=20 320w, https://www.gravatar.com/avatar/?s=400 800w" />
+          </picture>
+        </div>
       </div>
 
-      <form action="" onSubmit={ handleSubmit(handleOnSubmit) }>
-        {/* first name */}
-        <div>
-          <label htmlFor="fname">First name:</label>
-          <input 
-            type="text" 
-            id="fname" 
-            name="fname" 
-            onChange={ (e) => { handleFieldValueChange('fname', e) } } 
-            ref={ register({ 
-              required: true,
-              pattern: { value: /^\S*$/ }
-            }) } />
-            { errors.fname && <p>必須項目です。</p> }
-        </div>
+      <div className="sct-form">
+        <form className="sct-form__form" action="" onSubmit={ handleSubmit(handleOnSubmit) }>
+          {/* first name */}
+          <div className="sct-form__field sct-form__field--fname">
+            <label htmlFor="fname">First Name</label>
+            <input 
+              type="text" 
+              id="fname" 
+              name="fname" 
+              onChange={ (e) => { handleFieldValueChange('fname', e) } } 
+              ref={ register({ 
+                required: true,
+                pattern: { value: /^\S*$/ }
+              }) } />
+              { errors.fname && <p>必須項目です。</p> }
+          </div>
 
-        {/* last name */}
-        <div>
-          <label htmlFor="lname">Last name:</label>
-          <input 
-            type="text" 
-            id="lname" 
-            name="lname" 
-            onChange={ (e) => { handleFieldValueChange('lname', e) } } 
-            ref={ register({ 
-              required: true,
-              pattern: { value: /^\S*$/ }
-            }) } />
-          { errors.lname && <p>必須項目です。</p> }
-        </div>
+          {/* last name */}
+          <div className="sct-form__field sct-form__field--lname">
+            <label htmlFor="lname">Last Name</label>
+            <input 
+              type="text" 
+              id="lname" 
+              name="lname" 
+              onChange={ (e) => { handleFieldValueChange('lname', e) } } 
+              ref={ register({ 
+                required: true,
+                pattern: { value: /^\S*$/ }
+              }) } />
+            { errors.lname && <p>必須項目です。</p> }
+          </div>
 
-        {/* email */}
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input 
-            type="text" 
-            id="email" 
-            name="email" 
-            onChange={ (e) => { 
-              handleFieldValueChange('email', e);
-              handleUpdateGravatar(); 
-            } } 
-            ref={ register({ 
-              required: true,
-              pattern: {　value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,}
-            }) 
-          } />
-          { errors.email && errors.email.type === "required" && <p>必須項目です。</p> }
-          { errors.email && errors.email.type === "pattern" && <p>メールアドレスの形式が正しくありません。</p> }
-        </div>
+          {/* email */}
+          <div className="sct-form__field sct-form__field--email">
+            <label htmlFor="email">Email</label>
+            <input 
+              type="text" 
+              id="email" 
+              name="email" 
+              onChange={ (e) => { 
+                handleFieldValueChange('email', e);
+                handleUpdateGravatar(); 
+              } } 
+              ref={ register({ 
+                required: true,
+                pattern: {　value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,}
+              }) 
+            } />
+            { errors.email && errors.email.type === "required" && <p>必須項目です。</p> }
+            { errors.email && errors.email.type === "pattern" && <p>メールアドレスの形式が正しくありません。</p> }
+          </div>
 
-        {/* password */}
-        <div>
-          <label htmlFor="password">Enter password</label>
-          <input 
-            type="password" 
-            id="password"
-            name="password"
-            onChange={ (e) => { handleFieldValueChange('password', e) } } 
-            ref={ register({ 
-              required: true,
-              pattern: { value: /^\S*$/ }
-            }) } />
-          { errors.password && errors.password.type === "required" && <p>必須項目です。</p> }
-          { errors.password && errors.password.type === "pattern" && <p>スペースは使用できません。</p> }
-        </div>
+          {/* password */}
+          <div className="sct-form__field sct-form__field--password">
+            <label htmlFor="password">Password</label>
+            <input 
+              type="password" 
+              id="password"
+              name="password"
+              onChange={ (e) => { handleFieldValueChange('password', e) } } 
+              ref={ register({ 
+                required: true,
+                pattern: { value: /^\S*$/ }
+              }) } />
+            { errors.password && errors.password.type === "required" && <p>必須項目です。</p> }
+            { errors.password && errors.password.type === "pattern" && <p>スペースは使用できません。</p> }
 
-        <meter 
-          max="4" 
-          id="password-strength-meter"></meter>
-        <p id="password-strength-text"></p>
+            <div className="sct-form__strength">
+              <meter
+                className="form__pwMeter"
+                max="4" 
+                id="password-strength-meter"></meter>
+              <p id="password-strength-text" className="form__strength"></p>
+            </div>
+            
+            
+            <p 
+              id="showPw"
+              className="form__btn"
+              onClick={ handleTogglePasswordMask } >
+                {visibility && (<VisibilityOffIcon />)}
+                {!visibility && (<VisibilityOnIcon />)}</p>
+          </div>
 
-        <p 
-          id="showPw"
-          onClick={ handleTogglePasswordMask } >Show password</p>
-
-        {/* submit */}
-        <div>
-          <input type="submit" />
-        </div>
-      </form>
+          {/* submit */}
+          <div className="sct-form__field sct-form__field--btn">
+            <input type="submit" />
+          </div>
+        </form>
+      </div>
     </div>
   );
   

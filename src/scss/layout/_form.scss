@@ -1,12 +1,74 @@
 /*****************************
-form
+.formWrapper
 *****************************/
-.imgWrap {
-    width: 400px;
+.formWrapper {
+  display: flex;
+  width: 700px;
+  margin: 100px auto 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: $white;
+}
+
+/*****************************
+.sct-gravatar
+*****************************/
+.sct-gravatar {
+  width: 35%;
+  padding: 36px;
+  background-image: linear-gradient(357.96deg, #16c6b9, #19f0b0);
+
+  &__imgWrap {
+    width: 150px;
     height: auto;
+    margin: 0 auto;
+    border-radius: 100%;
+    overflow: hidden;
 
     img {
-        width: 100%;
-        height: auto;
+      width: 100%;
+      height: auto;
     }
+  }
+}
+
+/*****************************
+.sct-form
+*****************************/
+.sct-form {
+  display: flex;
+  flex-wrap: wrap;
+  width: 65%;
+  padding: 36px;
+  background-color: $light-grey;
+
+  &__field {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    &:not(:first-of-type){
+      margin-top: 20px;
+    }
+
+    label {
+      font-size: size(14);
+      font-weight: 600;
+      color: $mid-grey;
+      letter-spacing: 0.025em;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 100%;
+      height: 40px;
+      padding: 12px;
+      border-radius: 10px;
+    }
+  }
+
+  &__strength {
+    width: 100%;
+  }
 }

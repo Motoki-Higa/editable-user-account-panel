@@ -3,7 +3,9 @@ import Form from './Components/Form';
 
 function App() {
   return (
-    <Form />
+    <div className="l-container--1040">
+      <Form />
+    </div>
   );
 }
 

@@ -1,13 +1,7 @@
 /*****************************
 include fonts
 *****************************/
-// @font-face {
-// //   src:  url('./../fonts/FreedomMachine-Regular.eot') format('eot'),
-//         url('./../fonts/FreedomMachine-Regular.woff') format('woff'),
-//         url('./../fonts/FreedomMachine-Regular.ttf') format('truetype');
-// }
-
-// @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
 /*****************************
 h, p
@@ -21,8 +15,8 @@ $base-size: 16;
   @return ($target / $context) * 1rem;
 }
 
-small {
-  font-size: 70%;
+body {
+  font-family: 'Open Sans', sans-serif;
 }
 
 h2, .h2 {
@@ -61,6 +55,11 @@ p {
   }
 }
 
+small {
+  font-size: 70%;
+}
+
+
 /*****************************
 .txt--
 *****************************/
@@ -98,11 +97,6 @@ p {
     content: '※';
     margin-left: -20px;
   }
-}
-
-// text green
-.txt--green {
-  color: $green;
 }
 
 // text align
