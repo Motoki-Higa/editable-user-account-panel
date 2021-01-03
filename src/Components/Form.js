@@ -50,7 +50,7 @@ function Form() {
     let result = zxcvbn(passwordVal, [userInputs.fname, userInputs.lname, userInputs.email]);
 
     // Update the password strength meter
-    customMeter.setAttribute('class', 'strength-' + result.score)
+    customMeter.setAttribute('class', 'strength-' + result.score);
 
     // Update the text indicator
     if (passwordVal !== '') {
@@ -91,6 +91,15 @@ function Form() {
     localStorage.setItem('data', JSON.stringify(data));
 
     setMessage('Your details are updated!');
+
+    // reset password visibility to invisible
+    const passwordDOM = document.getElementById('password');
+    passwordDOM.setAttribute('type', 'password');
+    setIsPasswordVisible(false);
+
+    // reset strength meter to 0
+    const customMeter = document.getElementById('custom-meter');
+    customMeter.setAttribute('class', '');
   };
 
 
